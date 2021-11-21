@@ -5,13 +5,14 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1503623188405797" />
-        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.165" />
         <entry key="app/src/main/res/layout/item_event_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_header_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_info_profile.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/item_profile.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/item_profile_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_repository_profile.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/loading.xml" value="0.1381340579710145" />
       </map>
     </option>
   </component>

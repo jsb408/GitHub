@@ -38,6 +38,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        // FIXME: 2021/11/21 정보 화면에서 뒤로가기 하면 리스트 사라지는 오류
         // disposable.clear()
     }
     // endregion
@@ -61,6 +62,7 @@ class SearchFragment : Fragment() {
 
     private fun setButton() {
         binding.btnSearch.setOnClickListener {
+            viewModel.startLoading()
             setAdapter()
         }
     }
@@ -80,6 +82,7 @@ class SearchFragment : Fragment() {
 
         disposable.add(
             viewModel.flowable.subscribe { pagingData ->
+                viewModel.stopLoading()
                 searchResultAdapter.submitData(lifecycle, pagingData)
             }
         )

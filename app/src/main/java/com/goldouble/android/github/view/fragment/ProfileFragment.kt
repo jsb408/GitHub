@@ -62,6 +62,7 @@ class ProfileFragment : Fragment() {
 
         disposable.add(
             viewModel.flowable.subscribe { pagingData ->
+                viewModel.stopLoading()
                 profileAdapter.submitData(lifecycle, pagingData)
             }
         )
@@ -69,6 +70,7 @@ class ProfileFragment : Fragment() {
 
     private fun setSwipeRefreshLayout() {
         binding.srlProfile.setOnRefreshListener {
+            viewModel.startLoading()
             profileAdapter.refresh()
             binding.srlProfile.isRefreshing = false
         }
