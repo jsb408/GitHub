@@ -1,5 +1,6 @@
 package com.goldouble.android.github.view.adapter.pagingsource
 
+import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.goldouble.android.github.model.DetailModel
@@ -13,7 +14,8 @@ import java.io.IOException
 
 class ProfilePagingSource(private val username: String) : RxPagingSource<Int, DetailModel>() {
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, DetailModel>> {
-        val singleData = when (params.key ?: -1) {
+        val page = params.key ?: -1
+        val singleData = when (page) {
             -1 -> RetrofitService.gitHub.getInfo(username)
             0 -> RetrofitService.gitHub.getRepository(username)
             else -> RetrofitService.gitHub.getRepository(username)
@@ -22,13 +24,15 @@ class ProfilePagingSource(private val username: String) : RxPagingSource<Int, De
         return singleData
             .subscribeOn(Schedulers.io())
             .map<LoadResult<Int, DetailModel>> { result ->
+                Log.d(ProfilePagingSource::class.simpleName, result.toString())
+
                 LoadResult.Page(
                     data = when (result) {
                         is InfoModel -> listOf(result)
-                        else -> result as List<RepositoryModel>
+                        else -> result as List<DetailModel>
                     },
                     prevKey = params.key,
-                    nextKey = params.key?.plus(1)
+                    nextKey = page.plus(1)
                 )
             }
             .onErrorReturn { e ->
