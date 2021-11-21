@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.goldouble.android.github.databinding.ItemProfileSearchBinding
 import com.goldouble.android.github.model.ProfileModel
 
-class ProfileAdapter : PagingDataAdapter<ProfileModel, ProfileAdapter.ProfileViewHolder>(
-    ProfileComparator
-) {
+class ProfileAdapter(
+    private val onItemClickListener: (ProfileModel) -> Unit
+) : PagingDataAdapter<ProfileModel, ProfileAdapter.ProfileViewHolder>(ProfileComparator) {
     object ProfileComparator : DiffUtil.ItemCallback<ProfileModel>() {
         override fun areItemsTheSame(oldItem: ProfileModel, newItem: ProfileModel): Boolean = oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: ProfileModel, newItem: ProfileModel): Boolean = oldItem == newItem
@@ -29,6 +29,10 @@ class ProfileAdapter : PagingDataAdapter<ProfileModel, ProfileAdapter.ProfileVie
     inner class ProfileViewHolder(private val binding: ItemProfileSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(profile: ProfileModel?) {
             binding.profile = profile
+
+            binding.root.setOnClickListener { _ ->
+                profile?.let { onItemClickListener(it) }
+            }
         }
     }
 }

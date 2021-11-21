@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.goldouble.android.github.databinding.FragmentSearchBinding
 import com.goldouble.android.github.view.adapter.ProfileAdapter
 import com.goldouble.android.github.viewmodel.SearchViewModel
@@ -43,20 +44,33 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         setButton()
+        setRefreshLayout()
     }
 
     private fun setButton() {
         binding.btnSearch.setOnClickListener {
-            val adapter = ProfileAdapter()
-            binding.rvProfileSearch.adapter = adapter
-
-            disposable.add(
-                viewModel.flow.subscribe { pagingData ->
-                    adapter.submitData(lifecycle, pagingData)
-                }
-            )
+            setAdapter()
         }
+    }
 
+    private fun setRefreshLayout() {
+        binding.srlProfileSearch.setOnRefreshListener {
+            setAdapter()
+            binding.srlProfileSearch.isRefreshing = false
+        }
+    }
+
+    private fun setAdapter() {
+        val adapter = ProfileAdapter {
+            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToProfileFragment())
+        }
+        binding.rvProfileSearch.adapter = adapter
+
+        disposable.add(
+            viewModel.flow.subscribe { pagingData ->
+                adapter.submitData(lifecycle, pagingData)
+            }
+        )
     }
     // endregion
 }
