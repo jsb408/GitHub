@@ -18,21 +18,21 @@ class ProfilePagingSource(private val username: String) : RxPagingSource<Int, De
         val singleData = when (page) {
             -1 -> RetrofitService.gitHub.getInfo(username)
             0 -> RetrofitService.gitHub.getRepository(username)
-            else -> RetrofitService.gitHub.getRepository(username)
+            else -> RetrofitService.gitHub.getEvents(username, page)
         }
 
         return singleData
             .subscribeOn(Schedulers.io())
             .map<LoadResult<Int, DetailModel>> { result ->
-                Log.d(ProfilePagingSource::class.simpleName, result.toString())
+                val data = when (result) {
+                    is InfoModel -> listOf(result)
+                    else -> result as List<DetailModel>
+                }
 
                 LoadResult.Page(
-                    data = when (result) {
-                        is InfoModel -> listOf(result)
-                        else -> result as List<DetailModel>
-                    },
+                    data = data,
                     prevKey = params.key,
-                    nextKey = page.plus(1)
+                    nextKey = if(data.isEmpty()) null else page.plus(1)
                 )
             }
             .onErrorReturn { e ->

@@ -1,5 +1,6 @@
 package com.goldouble.android.github.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,9 +9,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.goldouble.android.github.R
+import com.goldouble.android.github.databinding.ItemEventProfileBinding
 import com.goldouble.android.github.databinding.ItemInfoProfileBinding
 import com.goldouble.android.github.databinding.ItemRepositoryProfileBinding
 import com.goldouble.android.github.model.DetailModel
+import com.goldouble.android.github.model.EventModel
 import com.goldouble.android.github.model.InfoModel
 import com.goldouble.android.github.model.RepositoryModel
 
@@ -20,10 +23,10 @@ class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewH
         override fun areContentsTheSame(oldItem: DetailModel, newItem: DetailModel): Boolean = oldItem.id == newItem.id
     }
 
-    override fun getItemViewType(position: Int): Int = when(position) {
-        0 -> R.layout.item_info_profile
-        1 -> R.layout.item_repository_profile
-        else -> R.layout.item_repository_profile
+    override fun getItemViewType(position: Int): Int = when(getItem(position)) {
+        is InfoModel -> R.layout.item_info_profile
+        is RepositoryModel-> R.layout.item_repository_profile
+        else -> R.layout.item_event_profile
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -52,8 +55,10 @@ class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewH
                     val repository = data as? RepositoryModel
                     binding.repository = repository
                 }
-                else -> {
-
+                is ItemEventProfileBinding -> {
+                    val event = data as? EventModel
+                    Log.d(ProfileAdapter::class.simpleName, event.toString())
+                    binding.event = event
                 }
             }
         }
