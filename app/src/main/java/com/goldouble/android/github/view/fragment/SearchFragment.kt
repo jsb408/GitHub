@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.goldouble.android.github.R
 import com.goldouble.android.github.databinding.FragmentSearchBinding
 import com.goldouble.android.github.view.adapter.SearchResultAdapter
 import com.goldouble.android.github.viewmodel.SearchViewModel
@@ -45,8 +47,16 @@ class SearchFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setActionBar()
         setButton()
         setRefreshLayout()
+    }
+
+    private fun setActionBar() {
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            setTitle(R.string.app_name)
+        }
     }
 
     private fun setButton() {

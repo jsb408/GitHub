@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -30,7 +31,6 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        bindViewModel()
         setView()
 
         return binding.root
@@ -42,16 +42,17 @@ class ProfileFragment : Fragment() {
     }
     // endregion
 
-    private fun bindViewModel() {
-        viewModel.infoModel.observe(viewLifecycleOwner) {
-            profileAdapter.setInfo(it)
-            //profileAdapter.snapshot().
-        }
-    }
-
     // region setView
     private fun setView() {
+        setActionBar()
         setRecyclerView()
+    }
+
+    private fun setActionBar() {
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = arguments.username
+        }
     }
 
     private fun setRecyclerView() {
