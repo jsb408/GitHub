@@ -16,6 +16,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class SearchViewModel : ViewModel() {
     var searchKeyword: String = ""
 
+    private val mIsNoResult = MutableLiveData<Boolean>()
+    val isNoResult: LiveData<Boolean> = mIsNoResult
+
     private val mIsLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = mIsLoading
 
@@ -32,5 +35,9 @@ class SearchViewModel : ViewModel() {
     fun stopLoading() {
         Log.d(SearchViewModel::class.simpleName, "stopLoading")
         mIsLoading.value = false
+    }
+
+    fun setResult(isEmpty: Boolean) {
+        mIsNoResult.postValue(isEmpty)
     }
 }
