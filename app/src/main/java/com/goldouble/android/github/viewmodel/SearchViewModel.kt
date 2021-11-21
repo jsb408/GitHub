@@ -7,14 +7,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.rxjava3.cachedIn
 import androidx.paging.rxjava3.flowable
 import com.goldouble.android.github.kPageSize
-import com.goldouble.android.github.view.adapter.pagingsource.ProfilePagingSource
+import com.goldouble.android.github.view.adapter.pagingsource.SearchResultPagingSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class SearchViewModel : ViewModel() {
     var searchKeyword: String = ""
 
     @ExperimentalCoroutinesApi
-    val flow get() = Pager(PagingConfig(kPageSize)) {
-        ProfilePagingSource(searchKeyword)
+    val flowable get() = Pager(PagingConfig(kPageSize)) {
+        SearchResultPagingSource(searchKeyword)
     }.flowable.cachedIn(viewModelScope)
 }

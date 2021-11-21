@@ -8,11 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.goldouble.android.github.databinding.FragmentSearchBinding
-import com.goldouble.android.github.view.adapter.ProfileAdapter
+import com.goldouble.android.github.view.adapter.SearchResultAdapter
 import com.goldouble.android.github.viewmodel.SearchViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class SearchFragment : Fragment() {
@@ -22,6 +21,8 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SearchViewModel>()
+
+    private lateinit var searchResultAdapter: SearchResultAdapter
 
     // region lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -35,6 +36,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        disposable.clear()
     }
     // endregion
 
@@ -55,20 +57,20 @@ class SearchFragment : Fragment() {
 
     private fun setRefreshLayout() {
         binding.srlProfileSearch.setOnRefreshListener {
-            setAdapter()
+            searchResultAdapter.refresh()
             binding.srlProfileSearch.isRefreshing = false
         }
     }
 
     private fun setAdapter() {
-        val adapter = ProfileAdapter {
-            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToProfileFragment())
+        searchResultAdapter = SearchResultAdapter {
+            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToProfileFragment(it))
         }
-        binding.rvProfileSearch.adapter = adapter
+        binding.rvProfileSearch.adapter = searchResultAdapter
 
         disposable.add(
-            viewModel.flow.subscribe { pagingData ->
-                adapter.submitData(lifecycle, pagingData)
+            viewModel.flowable.subscribe { pagingData ->
+                searchResultAdapter.submitData(lifecycle, pagingData)
             }
         )
     }

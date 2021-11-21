@@ -2,23 +2,33 @@ package com.goldouble.android.github.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.goldouble.android.github.databinding.ItemProfileSearchBinding
-import com.goldouble.android.github.model.ProfileModel
+import com.goldouble.android.github.R
+import com.goldouble.android.github.databinding.ItemInfoProfileBinding
+import com.goldouble.android.github.databinding.ItemRepositoryProfileBinding
+import com.goldouble.android.github.model.DetailModel
+import com.goldouble.android.github.model.InfoModel
+import com.goldouble.android.github.model.RepositoryModel
 
-class ProfileAdapter(
-    private val onItemClickListener: (ProfileModel) -> Unit
-) : PagingDataAdapter<ProfileModel, ProfileAdapter.ProfileViewHolder>(ProfileComparator) {
-    object ProfileComparator : DiffUtil.ItemCallback<ProfileModel>() {
-        override fun areItemsTheSame(oldItem: ProfileModel, newItem: ProfileModel): Boolean = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: ProfileModel, newItem: ProfileModel): Boolean = oldItem == newItem
+class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewHolder>(ProfileComparator) {
+    object ProfileComparator : DiffUtil.ItemCallback<DetailModel>() {
+        override fun areItemsTheSame(oldItem: DetailModel, newItem: DetailModel): Boolean = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: DetailModel, newItem: DetailModel): Boolean = oldItem.id == newItem.id
+    }
+
+    override fun getItemViewType(position: Int): Int = when(position) {
+        0 -> R.layout.item_info_profile
+        1 -> R.layout.item_repository_profile
+        else -> R.layout.item_repository_profile
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         return ProfileViewHolder(
-            ItemProfileSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
         )
     }
 
@@ -26,12 +36,25 @@ class ProfileAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class ProfileViewHolder(private val binding: ItemProfileSearchBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(profile: ProfileModel?) {
-            binding.profile = profile
+    fun setInfo(info: InfoModel) {
+        snapshot().items.toMutableList().add(0, info)
+        notifyItemInserted(0)
+    }
 
-            binding.root.setOnClickListener { _ ->
-                profile?.let { onItemClickListener(it) }
+    inner class ProfileViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: DetailModel?) {
+            when(binding) {
+                is ItemInfoProfileBinding -> {
+                    val info = data as? InfoModel
+                    binding.info = info
+                }
+                is ItemRepositoryProfileBinding -> {
+                    val repository = data as? RepositoryModel
+                    binding.repository = repository
+                }
+                else -> {
+
+                }
             }
         }
     }
