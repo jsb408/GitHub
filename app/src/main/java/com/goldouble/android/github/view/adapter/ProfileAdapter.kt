@@ -57,7 +57,6 @@ class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewH
                 }
                 is ItemEventProfileBinding -> {
                     val event = data as? EventModel
-                    Log.d(ProfileAdapter::class.simpleName, event.toString())
                     binding.event = event
                 }
             }

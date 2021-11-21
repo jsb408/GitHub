@@ -46,6 +46,7 @@ class ProfileFragment : Fragment() {
     private fun setView() {
         setActionBar()
         setRecyclerView()
+        setSwipeRefreshLayout()
     }
 
     private fun setActionBar() {
@@ -64,6 +65,13 @@ class ProfileFragment : Fragment() {
                 profileAdapter.submitData(lifecycle, pagingData)
             }
         )
+    }
+
+    private fun setSwipeRefreshLayout() {
+        binding.srlProfile.setOnRefreshListener {
+            profileAdapter.refresh()
+            binding.srlProfile.isRefreshing = false
+        }
     }
     // endregion
 }

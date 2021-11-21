@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single
 import retrofit2.http.*
 
 interface GitHubService {
-    @Headers("Authrization: token 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")
+    @Headers("Authorization: token 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")
 
     @GET("/search/users")
     fun getUsers(
