@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
             name="noResultText"
             type="String" />
     </data>
@@ -41,5 +45,12 @@
                 android:text="@{noResultText}"
                 tools:text="@tools:sample/lorem"/>
         </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            app:isVisible="@{isLoading != false}"/>
     </FrameLayout>
 </layout>

@@ -45,6 +45,10 @@ class ProfileFragment : Fragment() {
 
     // region setView
     private fun bindViewModel() {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (!it) binding.srlProfile.isRefreshing = false
+        }
+
         viewModel.userInfo.observe(viewLifecycleOwner) {
             profileAdapter.setUserData(it)
         }
@@ -85,7 +89,6 @@ class ProfileFragment : Fragment() {
             viewModel.startLoading()
             loadData()
             profileAdapter.refresh()
-            binding.srlProfile.isRefreshing = false
         }
     }
 

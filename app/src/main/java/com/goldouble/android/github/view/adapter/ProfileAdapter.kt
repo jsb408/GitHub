@@ -19,7 +19,7 @@ import com.goldouble.android.github.model.RepositoryModel
 
 class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
     private var infoModel: InfoModel? = null
-    private var repositoryList: List<RepositoryModel> = emptyList()
+    private var repositoryList: List<RepositoryModel>? = null
 
     private val eventAdapter = EventAdapter()
 
@@ -62,13 +62,18 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() 
                 is ItemInfoProfileBinding -> binding.info = infoModel
                 is ItemRecyclerviewProfileBinding -> {
                     if (bindingAdapterPosition == 1) {
-                        binding.noResultText = if (repositoryList.isEmpty()) "저장소가 없습니다." else null
-                        binding.rvProfile.adapter = RepositoryAdapter(repositoryList)
+                        binding.isLoading = repositoryList == null
+                        binding.noResultText = if (repositoryList?.isEmpty() == true) "저장소가 없습니다." else null
+
+                        repositoryList?.let {
+                            binding.rvProfile.adapter = RepositoryAdapter(it)
+                        }
                     } else {
                         eventAdapter.addLoadStateListener {
-                            if (it.refresh is LoadState.NotLoading)
-                                if (eventAdapter.itemCount == 0)
-                                    binding.noResultText = "이벤트가 없습니다."
+                            if (it.refresh is LoadState.NotLoading) {
+                                binding.isLoading = false
+                                if (eventAdapter.itemCount == 0) binding.noResultText = "이벤트가 없습니다."
+                            }
                         }
                         binding.rvProfile.adapter = eventAdapter
                     }

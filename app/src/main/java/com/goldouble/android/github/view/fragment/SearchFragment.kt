@@ -52,6 +52,10 @@ class SearchFragment : Fragment() {
     // endregion
 
     private fun bindViewModel() {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (!it) binding.srlProfileSearch.isRefreshing = false
+        }
+
         viewModel.searchKeyword.observe(viewLifecycleOwner) {
             setAdapter()
         }
@@ -85,14 +89,14 @@ class SearchFragment : Fragment() {
         }
         binding.rvProfileSearch.adapter = searchResultAdapter
         searchResultAdapter.addLoadStateListener {
-            if (it.refresh is LoadState.NotLoading)
+            if (it.refresh is LoadState.NotLoading) {
+                viewModel.stopLoading()
                 viewModel.setResult((binding.rvProfileSearch.adapter as SearchResultAdapter).itemCount == 0)
+            }
         }
 
         disposable.add(
             viewModel.flowable.subscribe { pagingData ->
-                viewModel.stopLoading()
-                binding.srlProfileSearch.isRefreshing = false
                 searchResultAdapter.submitData(lifecycle, pagingData)
             }
         )

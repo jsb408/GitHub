@@ -36,7 +36,7 @@ data class EventModel(
         EventType.CreateEvent -> "${payload.refType}: ${payload.ref ?: payload.description ?: "No description."}"
         EventType.DeleteEvent -> "${payload.refType}: ${payload.ref}"
         EventType.ForkEvent -> payload.forkee?.fullName
-        EventType.GollumEvent -> payload.pages?.fold("") { acc, page -> acc + if (acc.isNotEmpty()) ", " else "" + page.toString() }
+        EventType.GollumEvent -> payload.pages?.fold("") { acc, page -> "$acc${page.title}\n" }
         EventType.IssueCommentEvent -> payload.issue?.title
         EventType.IssuesEvent -> "${payload.action}: ${payload.issue?.title}"
         EventType.MemberEvent -> "${payload.action}: ${payload.member?.login}"

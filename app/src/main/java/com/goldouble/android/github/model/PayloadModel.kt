@@ -42,6 +42,6 @@ data class PayloadModel(
     // endregion
 
     // region GollumEvent
-    val pages: List<Int>? = null
+    val pages: List<PageModel>? = null
     // endregion
 )
