@@ -68,7 +68,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        profileAdapter = ProfileAdapter(arguments.username)
+        profileAdapter = ProfileAdapter()
         binding.rvProfile.adapter = profileAdapter
         loadData()
 

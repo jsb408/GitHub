@@ -6,16 +6,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.goldouble.android.github.R
 import com.goldouble.android.github.databinding.ItemInfoProfileBinding
 import com.goldouble.android.github.databinding.ItemRecyclerviewProfileBinding
-import com.goldouble.android.github.model.*
-import com.goldouble.android.github.retrofit.RetrofitService
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.goldouble.android.github.model.EventModel
+import com.goldouble.android.github.model.InfoModel
+import com.goldouble.android.github.model.RepositoryModel
 
-class ProfileAdapter(private val username: String): RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
+class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
     private var infoModel: InfoModel? = null
     private var repositoryList: List<RepositoryModel> = emptyList()
 
@@ -63,16 +64,15 @@ class ProfileAdapter(private val username: String): RecyclerView.Adapter<Profile
                 }
                 is ItemRecyclerviewProfileBinding -> {
                     if (bindingAdapterPosition == 1) {
-                        RetrofitService.gitHub.getRepository(username)
-                            .observeOn(Schedulers.io())
-                            .subscribe(
-                                {
-                                    binding.rvProfile.adapter = RepositoryAdapter(it)
-                                }, { e ->
-                                    Log.e(ProfileAdapter::class.simpleName, e.localizedMessage, e)
-                                }
-                            )
+                        if (repositoryList.isEmpty())
+                            binding.noResultText = "저장소가 없습니다."
+                        binding.rvProfile.adapter = RepositoryAdapter(repositoryList)
                     } else {
+                        eventAdapter.addLoadStateListener {
+                            if (it.refresh is LoadState.NotLoading)
+                                if (eventAdapter.itemCount == 0)
+                                    binding.noResultText = "이벤트가 없습니다."
+                        }
                         binding.rvProfile.adapter = eventAdapter
                     }
                 }

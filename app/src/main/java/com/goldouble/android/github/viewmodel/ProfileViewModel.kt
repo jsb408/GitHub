@@ -54,11 +54,11 @@ class ProfileViewModel(private val username: String) : ViewModel() {
     }
 
     fun loadRepositories() {
-        RetrofitService.gitHub.getInfo(username)
+        RetrofitService.gitHub.getRepository(username)
             .observeOn(Schedulers.io())
             .subscribe(
                 {
-                    mUserInfo.postValue(it)
+                    mRepositoryList.postValue(it)
                 }, { e ->
                     Log.e(ProfileAdapter::class.simpleName, e.localizedMessage, e)
                 }

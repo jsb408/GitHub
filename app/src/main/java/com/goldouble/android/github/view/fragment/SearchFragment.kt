@@ -86,7 +86,7 @@ class SearchFragment : Fragment() {
             findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToProfileFragment(it))
         }
         binding.rvProfileSearch.adapter = searchResultAdapter
-        (binding.rvProfileSearch.adapter as SearchResultAdapter).addLoadStateListener {
+        searchResultAdapter.addLoadStateListener {
             if (it.refresh is LoadState.NotLoading)
                 viewModel.setResult((binding.rvProfileSearch.adapter as SearchResultAdapter).itemCount == 0)
         }
