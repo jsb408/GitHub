@@ -14,7 +14,7 @@ import com.goldouble.android.github.model.InfoModel
 import com.goldouble.android.github.model.RepositoryModel
 import com.goldouble.android.github.retrofit.RetrofitService
 import com.goldouble.android.github.view.adapter.ProfileAdapter
-import com.goldouble.android.github.view.adapter.pagingsource.ProfilePagingSource
+import com.goldouble.android.github.view.adapter.pagingsource.EventPagingSource
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -30,7 +30,7 @@ class ProfileViewModel(private val username: String) : ViewModel() {
 
     @ExperimentalCoroutinesApi
     val flowable get() = Pager(PagingConfig(kPageSize)) {
-        ProfilePagingSource(username)
+        EventPagingSource(username)
     }.flowable.cachedIn(viewModelScope)
 
     fun startLoading() {

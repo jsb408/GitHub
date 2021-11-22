@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import java.io.IOException
 
-class ProfilePagingSource(private val username: String) : RxPagingSource<Int, EventModel>() {
+class EventPagingSource(private val username: String) : RxPagingSource<Int, EventModel>() {
     private val refreshKey = 1
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, EventModel>> {
@@ -26,7 +26,7 @@ class ProfilePagingSource(private val username: String) : RxPagingSource<Int, Ev
                 )
             }
             .onErrorReturn { e ->
-                Log.e(ProfilePagingSource::class.simpleName, e.localizedMessage, e)
+                Log.e(EventPagingSource::class.simpleName, e.localizedMessage, e)
                 when (e) {
                     is IOException -> LoadResult.Error(e)
                     is HttpException -> LoadResult.Error(e)
@@ -35,7 +35,5 @@ class ProfilePagingSource(private val username: String) : RxPagingSource<Int, Ev
             }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, EventModel>): Int {
-        return refreshKey
-    }
+    override fun getRefreshKey(state: PagingState<Int, EventModel>): Int = refreshKey
 }

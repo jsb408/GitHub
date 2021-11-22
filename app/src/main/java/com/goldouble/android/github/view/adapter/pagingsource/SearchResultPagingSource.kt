@@ -35,7 +35,5 @@ class SearchResultPagingSource(private val query: String) : RxPagingSource<Int, 
             }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ProfileModel>): Int {
-        return refreshKey
-    }
+    override fun getRefreshKey(state: PagingState<Int, ProfileModel>): Int = refreshKey
 }
