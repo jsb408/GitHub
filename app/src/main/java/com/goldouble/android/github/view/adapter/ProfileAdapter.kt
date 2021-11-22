@@ -5,29 +5,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
+import androidx.lifecycle.Lifecycle
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.goldouble.android.github.R
-import com.goldouble.android.github.databinding.ItemEventProfileBinding
 import com.goldouble.android.github.databinding.ItemInfoProfileBinding
-import com.goldouble.android.github.databinding.ItemRepositoryProfileBinding
-import com.goldouble.android.github.model.DetailModel
-import com.goldouble.android.github.model.EventModel
-import com.goldouble.android.github.model.InfoModel
-import com.goldouble.android.github.model.RepositoryModel
+import com.goldouble.android.github.databinding.ItemRecyclerviewProfileBinding
+import com.goldouble.android.github.model.*
+import com.goldouble.android.github.retrofit.RetrofitService
+import io.reactivex.rxjava3.schedulers.Schedulers
 
-class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewHolder>(ProfileComparator) {
-    object ProfileComparator : DiffUtil.ItemCallback<DetailModel>() {
-        override fun areItemsTheSame(oldItem: DetailModel, newItem: DetailModel): Boolean = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: DetailModel, newItem: DetailModel): Boolean = oldItem.id == newItem.id
-    }
+class ProfileAdapter(private val username: String): RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
+    private var infoModel: InfoModel? = null
+    private var repositoryList: List<RepositoryModel> = emptyList()
 
-    override fun getItemViewType(position: Int): Int = when(getItem(position)) {
-        is InfoModel -> R.layout.item_info_profile
-        is RepositoryModel-> R.layout.item_repository_profile
-        else -> R.layout.item_event_profile
-    }
+    private val eventAdapter = EventAdapter()
+
+    override fun getItemCount(): Int = 3
+
+    override fun getItemViewType(position: Int): Int =
+        if(position == 0) R.layout.item_info_profile else R.layout.item_recyclerview_profile
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         return ProfileViewHolder(
@@ -36,28 +33,48 @@ class ProfileAdapter: PagingDataAdapter<DetailModel, ProfileAdapter.ProfileViewH
     }
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind()
     }
 
-    fun setInfo(info: InfoModel) {
-        snapshot().items.toMutableList().add(0, info)
-        notifyItemInserted(0)
+    fun submitEventData(lifecycle: Lifecycle, pagingData: PagingData<EventModel>) {
+        eventAdapter.submitData(lifecycle, pagingData)
     }
+
+    fun refresh() {
+        eventAdapter.refresh()
+    }
+
+    fun setUserData(infoModel: InfoModel) {
+        this.infoModel = infoModel
+        notifyItemChanged(0)
+    }
+
+    fun setRepositoryList(repositoryList: List<RepositoryModel>) {
+        this.repositoryList = repositoryList
+        notifyItemChanged(1)
+    }
+
 
     inner class ProfileViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DetailModel?) {
+        fun bind() {
             when(binding) {
                 is ItemInfoProfileBinding -> {
-                    val info = data as? InfoModel
-                    binding.info = info
+                    binding.info = infoModel
                 }
-                is ItemRepositoryProfileBinding -> {
-                    val repository = data as? RepositoryModel
-                    binding.repository = repository
-                }
-                is ItemEventProfileBinding -> {
-                    val event = data as? EventModel
-                    binding.event = event
+                is ItemRecyclerviewProfileBinding -> {
+                    if (bindingAdapterPosition == 1) {
+                        RetrofitService.gitHub.getRepository(username)
+                            .observeOn(Schedulers.io())
+                            .subscribe(
+                                {
+                                    binding.rvProfile.adapter = RepositoryAdapter(it)
+                                }, { e ->
+                                    Log.e(ProfileAdapter::class.simpleName, e.localizedMessage, e)
+                                }
+                            )
+                    } else {
+                        binding.rvProfile.adapter = eventAdapter
+                    }
                 }
             }
         }

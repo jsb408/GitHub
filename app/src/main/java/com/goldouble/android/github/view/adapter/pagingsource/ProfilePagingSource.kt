@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
 import com.goldouble.android.github.model.DetailModel
+import com.goldouble.android.github.model.EventModel
 import com.goldouble.android.github.model.InfoModel
 import com.goldouble.android.github.retrofit.RetrofitService
 import io.reactivex.rxjava3.core.Single
@@ -11,29 +12,19 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import java.io.IOException
 
-class ProfilePagingSource(private val username: String) : RxPagingSource<Int, DetailModel>() {
-    private val refreshKey = -1
+class ProfilePagingSource(private val username: String) : RxPagingSource<Int, EventModel>() {
+    private val refreshKey = 1
 
-    override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, DetailModel>> {
+    override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, EventModel>> {
         val page = params.key ?: refreshKey
-        val singleData = when (page) {
-            -1 -> RetrofitService.gitHub.getInfo(username)
-            0 -> RetrofitService.gitHub.getRepository(username)
-            else -> RetrofitService.gitHub.getEvents(username, page)
-        }
 
-        return singleData
+        return RetrofitService.gitHub.getEvents(username, page)
             .subscribeOn(Schedulers.io())
-            .map<LoadResult<Int, DetailModel>> { result ->
-                val data = when (result) {
-                    is InfoModel -> listOf(result)
-                    else -> result as List<DetailModel>
-                }
-
+            .map<LoadResult<Int, EventModel>> { result ->
                 LoadResult.Page(
-                    data = data,
+                    data = result,
                     prevKey = if(page > refreshKey) page.minus(1) else null,
-                    nextKey = if(data.isNotEmpty()) page.plus(1) else null
+                    nextKey = if(result.isNotEmpty()) page.plus(1) else null
                 )
             }
             .onErrorReturn { e ->
@@ -46,7 +37,7 @@ class ProfilePagingSource(private val username: String) : RxPagingSource<Int, De
             }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, DetailModel>): Int {
+    override fun getRefreshKey(state: PagingState<Int, EventModel>): Int {
         return refreshKey
     }
 }

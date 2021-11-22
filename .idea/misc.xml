@@ -6,16 +6,20 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item.xml" value="0.296195652173913" />
+        <entry key="app/src/main/res/layout/item_event.xml" value="0.296195652173913" />
         <entry key="app/src/main/res/layout/item_event_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_header_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_info_profile.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/item_profile.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/item_profile_search.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_recyclerview_profile.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/item_repository_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/loading.xml" value="0.1381340579710145" />
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

@@ -8,10 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.paging.LoadState
 import com.goldouble.android.github.databinding.FragmentProfileBinding
 import com.goldouble.android.github.view.adapter.ProfileAdapter
-import com.goldouble.android.github.view.adapter.SearchResultAdapter
 import com.goldouble.android.github.viewmodel.ProfileViewModel
 import com.goldouble.android.github.viewmodel.factory.ProfileViewModelFactory
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -33,6 +31,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
+        bindViewModel()
         setView()
 
         return binding.root
@@ -45,6 +44,16 @@ class ProfileFragment : Fragment() {
     // endregion
 
     // region setView
+    private fun bindViewModel() {
+        viewModel.userInfo.observe(viewLifecycleOwner) {
+            profileAdapter.setUserData(it)
+        }
+
+        viewModel.repositoryList.observe(viewLifecycleOwner) {
+            profileAdapter.setRepositoryList(it)
+        }
+    }
+
     private fun setView() {
         setActionBar()
         setRecyclerView()
@@ -59,18 +68,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        profileAdapter = ProfileAdapter()
+        profileAdapter = ProfileAdapter(arguments.username)
         binding.rvProfile.adapter = profileAdapter
-
-        (binding.rvProfile.adapter as ProfileAdapter).addLoadStateListener {
-//            if (it.refresh is LoadState.NotLoading)
-//                viewModel.setResult((binding.rvProfileSearch.adapter as SearchResultAdapter).itemCount == 0)
-        }
+        loadData()
 
         disposable.add(
             viewModel.flowable.subscribe { pagingData ->
                 viewModel.stopLoading()
-                profileAdapter.submitData(lifecycle, pagingData)
+                profileAdapter.submitEventData(lifecycle, pagingData)
             }
         )
     }
@@ -78,9 +83,15 @@ class ProfileFragment : Fragment() {
     private fun setSwipeRefreshLayout() {
         binding.srlProfile.setOnRefreshListener {
             viewModel.startLoading()
+            loadData()
             profileAdapter.refresh()
             binding.srlProfile.isRefreshing = false
         }
+    }
+
+    private fun loadData() {
+        viewModel.loadUserInfo()
+        viewModel.loadRepositories()
     }
     // endregion
 }
