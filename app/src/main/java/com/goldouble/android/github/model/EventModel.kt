@@ -44,7 +44,7 @@ data class EventModel(
         EventType.PullRequestEvent -> "${payload.action}: ${payload.pullRequest?.title}"
         EventType.PullRequestReviewEvent -> "${payload.action}: ${payload.pullRequest?.title}"
         EventType.PullRequestReviewCommentEvent -> "${payload.action}: ${payload.pullRequest?.title}"
-        EventType.PushEvent -> payload.commits?.fold("") { acc, commit -> "$acc${commit.message}\n----------\n" }
+        EventType.PushEvent -> payload.commits?.fold("") { acc, commit -> "$acc----------\n${commit.message}\n" }
         EventType.ReleaseEvent -> "${payload.action}: ${payload.releaseModel?.name}"
         EventType.SponsorshipEvent -> payload.action
         EventType.WatchEvent -> payload.action

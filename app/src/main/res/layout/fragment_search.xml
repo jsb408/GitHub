@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            app:isVisible="@{viewModel.noResult}"
+            app:isVisible="@{viewModel.noResult &amp;&amp; !viewModel.loading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

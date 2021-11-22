@@ -1,13 +1,11 @@
 package com.goldouble.android.github.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.goldouble.android.github.R
 import com.goldouble.android.github.databinding.ActivityMainBinding
-import com.goldouble.android.github.retrofit.RetrofitService
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

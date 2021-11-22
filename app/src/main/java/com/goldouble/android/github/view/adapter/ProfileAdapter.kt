@@ -7,8 +7,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
 import com.goldouble.android.github.R
 import com.goldouble.android.github.databinding.ItemInfoProfileBinding
