@@ -59,13 +59,10 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() 
     inner class ProfileViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             when(binding) {
-                is ItemInfoProfileBinding -> {
-                    binding.info = infoModel
-                }
+                is ItemInfoProfileBinding -> binding.info = infoModel
                 is ItemRecyclerviewProfileBinding -> {
                     if (bindingAdapterPosition == 1) {
-                        if (repositoryList.isEmpty())
-                            binding.noResultText = "저장소가 없습니다."
+                        binding.noResultText = if (repositoryList.isEmpty()) "저장소가 없습니다." else null
                         binding.rvProfile.adapter = RepositoryAdapter(repositoryList)
                     } else {
                         eventAdapter.addLoadStateListener {

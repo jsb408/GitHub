@@ -29,7 +29,7 @@ class SearchViewModel : ViewModel() {
         SearchResultPagingSource(searchKeyword.value!!)
     }.flowable.cachedIn(viewModelScope)
 
-    fun startLoading() {
+    private fun startLoading() {
         mIsLoading.value = true
     }
 
