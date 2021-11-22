@@ -32,21 +32,21 @@ data class EventModel(
     var isExpanded: Boolean = false
 
     val payloadText get() = when(eventType) {
-        EventType.CommitCommentEvent -> null
-        EventType.CreateEvent -> "${payload.refType}: ${payload.description ?: "No description"}"
-        EventType.DeleteEvent -> null
+        EventType.CommitCommentEvent -> payload.action
+        EventType.CreateEvent -> "${payload.refType}: ${payload.ref ?: payload.description ?: "No description."}"
+        EventType.DeleteEvent -> "${payload.refType}: ${payload.ref}"
         EventType.ForkEvent -> payload.forkee?.fullName
-        EventType.GollumEvent -> null
+        EventType.GollumEvent -> payload.pages?.fold("") { acc, page -> acc + if (acc.isNotEmpty()) ", " else "" + page.toString() }
         EventType.IssueCommentEvent -> payload.issue?.title
         EventType.IssuesEvent -> "${payload.action}: ${payload.issue?.title}"
         EventType.MemberEvent -> "${payload.action}: ${payload.member?.login}"
-        EventType.PublicEvent -> null
-        EventType.PullRequestEvent -> null
-        EventType.PullRequestReviewEvent -> null
-        EventType.PullRequestReviewCommentEvent -> null
+        EventType.PublicEvent -> payload.action
+        EventType.PullRequestEvent -> "${payload.action}: ${payload.pullRequest?.title}"
+        EventType.PullRequestReviewEvent -> "${payload.action}: ${payload.pullRequest?.title}"
+        EventType.PullRequestReviewCommentEvent -> "${payload.action}: ${payload.pullRequest?.title}"
         EventType.PushEvent -> payload.commits?.fold("") { acc, commit -> "$acc${commit.message}\n----------\n" }
-        EventType.ReleaseEvent -> null
-        EventType.SponsorshipEvent -> null
+        EventType.ReleaseEvent -> "${payload.action}: ${payload.releaseModel?.name}"
+        EventType.SponsorshipEvent -> payload.action
         EventType.WatchEvent -> payload.action
     }
 

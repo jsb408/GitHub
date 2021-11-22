@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> event.toggle()}">
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/imageFilterView2"
@@ -71,7 +72,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/selector_up_down_arrow"
-            android:onClick="@{() -> event.toggle()}"
             app:isActivated="@{event.expanded}"
             app:layout_constraintBottom_toBottomOf="@+id/textView9"
             app:layout_constraintEnd_toEndOf="@+id/textView5" />
@@ -93,11 +93,6 @@
                 android:paddingVertical="10dp"
                 android:paddingHorizontal="20dp"
                 tools:text="@tools:sample/lorem"/>
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/rv_payload_profile"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
         </net.cachapa.expandablelayout.ExpandableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

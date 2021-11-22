@@ -7,14 +7,16 @@ data class PayloadModel(
     val commits: List<CommitModel>? = null,
     // endregion
 
-    // region CreateEvent
+    // region CreateEvent, DeleteEvent
+    val ref: String? = null,
+
     @SerializedName("ref_type")
     val refType: String? = null,
-
     val description: String? = null,
     // endregion
 
-    // region WatchEvent, MemberEvent, IssuesEvent
+    // region WatchEvent, MemberEvent, IssuesEvent, PullRequestEvent, PullRequestReviewEvent,
+    // PullRequestReviewCommentEvent, ReleaseEvent
     val action: String? = null,
     // endregion
 
@@ -27,6 +29,19 @@ data class PayloadModel(
     // endregion
 
     // region IssueCommentEvent, IssuesEvent
-    val issue: IssueModel? = null
+    val issue: IssueModel? = null,
+    // endregion
+
+    // region PullRequestEvent
+    @SerializedName("pull_request")
+    val pullRequest: PullRequestModel? = null,
+    // endregion
+
+    // region ReleaseEvent
+    val releaseModel: ReleaseModel? = null,
+    // endregion
+
+    // region GollumEvent
+    val pages: List<Int>? = null
     // endregion
 )
