@@ -54,16 +54,50 @@
             tools:text="@tools:sample/lorem" />
 
         <TextView
+            android:id="@+id/textView9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="8dp"
             android:text="@{event.repo.name}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/btn_expand_profile"
             app:layout_constraintStart_toEndOf="@+id/imageFilterView2"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
             tools:text="@tools:sample/lorem" />
+
+        <ImageView
+            android:id="@+id/btn_expand_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_up_down_arrow"
+            android:onClick="@{() -> event.toggle()}"
+            app:isActivated="@{event.expanded}"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintEnd_toEndOf="@+id/textView5" />
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/el_event_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:isExpanded="@{event.expanded}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{event.payloadText}"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp"
+                tools:text="@tools:sample/lorem"/>
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rv_payload_profile"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
+        </net.cachapa.expandablelayout.ExpandableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

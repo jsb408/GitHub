@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import net.cachapa.expandablelayout.ExpandableLayout
 
 class BindingAdapter {
     companion object {
@@ -27,6 +28,18 @@ class BindingAdapter {
         @BindingAdapter("isVisible")
         fun isVisible(view: View, isVisible: Boolean) {
             view.isVisible = isVisible
+        }
+
+        @JvmStatic
+        @BindingAdapter("isActivated")
+        fun isActivated(view: View, isActivated: Boolean) {
+            view.isActivated = isActivated
+        }
+
+        @JvmStatic
+        @BindingAdapter("isExpanded")
+        fun isExpanded(view: ExpandableLayout, isExpanded: Boolean) {
+            view.isExpanded = isExpanded
         }
     }
 }

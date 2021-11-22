@@ -3,19 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/selector_up_down_arrow.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item.xml" value="0.296195652173913" />
         <entry key="app/src/main/res/layout/item_event.xml" value="0.296195652173913" />
-        <entry key="app/src/main/res/layout/item_event_profile.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/item_event_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_header_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_info_profile.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/item_payload_event.xml" value="0.29030797101449274" />
         <entry key="app/src/main/res/layout/item_profile.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/item_profile_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_recyclerview_profile.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/item_repository_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_result_search.xml" value="0.296195652173913" />
+        <entry key="app/src/main/res/layout/item_text_event.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/loading.xml" value="0.1381340579710145" />
       </map>
     </option>

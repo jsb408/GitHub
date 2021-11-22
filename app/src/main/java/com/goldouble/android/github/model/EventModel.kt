@@ -1,13 +1,14 @@
 package com.goldouble.android.github.model
 
-data class EventModel(
-    override val id: Long = 0,
+import androidx.databinding.BaseObservable
 
+data class EventModel(
+    val id: Long,
     val type: String = "",
-    // val payload: PayloadModel,
+    val payload: PayloadModel,
     val repo: RepositoryModel,
     val actor: ProfileModel
-): DetailModel {
+): BaseObservable() {
     enum class EventType(val title: String) {
         CommitCommentEvent("Comment"),
         CreateEvent("Create"),
@@ -28,4 +29,29 @@ data class EventModel(
     }
 
     val eventType get() = EventType.valueOf(type)
+    var isExpanded: Boolean = false
+
+    val payloadText get() = when(eventType) {
+        EventType.CommitCommentEvent -> null
+        EventType.CreateEvent -> "${payload.refType}: ${payload.description ?: "No description"}"
+        EventType.DeleteEvent -> null
+        EventType.ForkEvent -> payload.forkee?.fullName
+        EventType.GollumEvent -> null
+        EventType.IssueCommentEvent -> payload.issue?.title
+        EventType.IssuesEvent -> "${payload.action}: ${payload.issue?.title}"
+        EventType.MemberEvent -> "${payload.action}: ${payload.member?.login}"
+        EventType.PublicEvent -> null
+        EventType.PullRequestEvent -> null
+        EventType.PullRequestReviewEvent -> null
+        EventType.PullRequestReviewCommentEvent -> null
+        EventType.PushEvent -> payload.commits?.fold("") { acc, commit -> "$acc${commit.message}\n----------\n" }
+        EventType.ReleaseEvent -> null
+        EventType.SponsorshipEvent -> null
+        EventType.WatchEvent -> payload.action
+    }
+
+    fun toggle() {
+        isExpanded = !isExpanded
+        notifyChange()
+    }
 }
