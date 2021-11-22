@@ -1,6 +1,5 @@
 package com.goldouble.android.github.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,10 @@ import com.goldouble.android.github.view.adapter.pagingsource.SearchResultPaging
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class SearchViewModel : ViewModel() {
-    var searchKeyword: String = ""
+    var inputKeyword: String = ""
+
+    private val mSearchKeyword = MutableLiveData<String>()
+    val searchKeyword: LiveData<String> = mSearchKeyword
 
     private val mIsNoResult = MutableLiveData<Boolean>()
     val isNoResult: LiveData<Boolean> = mIsNoResult
@@ -24,20 +26,23 @@ class SearchViewModel : ViewModel() {
 
     @ExperimentalCoroutinesApi
     val flowable get() = Pager(PagingConfig(kPageSize)) {
-        SearchResultPagingSource(searchKeyword)
+        SearchResultPagingSource(searchKeyword.value!!)
     }.flowable.cachedIn(viewModelScope)
 
     fun startLoading() {
-        Log.d(SearchViewModel::class.simpleName, "startLoading")
         mIsLoading.value = true
     }
 
     fun stopLoading() {
-        Log.d(SearchViewModel::class.simpleName, "stopLoading")
         mIsLoading.value = false
     }
 
     fun setResult(isEmpty: Boolean) {
         mIsNoResult.postValue(isEmpty)
+    }
+
+    fun search() {
+        startLoading()
+        mSearchKeyword.value = inputKeyword
     }
 }

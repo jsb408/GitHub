@@ -38,6 +38,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
+        bindViewModel()
         setView()
 
         return binding.root
@@ -46,10 +47,15 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        // FIXME: 2021/11/21 정보 화면에서 뒤로가기 하면 리스트 사라지는 오류
-        // disposable.clear()
+        disposable.clear()
     }
     // endregion
+
+    private fun bindViewModel() {
+        viewModel.searchKeyword.observe(viewLifecycleOwner) {
+            setAdapter()
+        }
+    }
 
     // region setView
     private fun setView() {
@@ -57,7 +63,6 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         setActionBar()
-        setButton()
         setRefreshLayout()
     }
 
@@ -65,13 +70,6 @@ class SearchFragment : Fragment() {
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             setTitle(R.string.app_name)
-        }
-    }
-
-    private fun setButton() {
-        binding.btnSearch.setOnClickListener {
-            viewModel.startLoading()
-            setAdapter()
         }
     }
 
